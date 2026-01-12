@@ -2,7 +2,36 @@
 # this is for a Laravel project deployment
 
 # if having trouble saving from via VSCode, you may have to do the following:
+##########################################################################################################
+# I am assuming the sudo username is user and the web server run as user www-data
 
+# Do NOT uncomment these commands
+# sudo usermod -a -G www-data user
+
+# Set ownership to user:www-data
+# sudo chown -R osi:www-data /home/user/root-web-directory
+
+# Make files group-writable
+# sudo chmod -R g+w /home/osi/root-web-directory
+
+# Set group sticky bit so new files inherit www-data group
+# sudo chmod g+s /home/user/root-web-directory
+# find /home/user/root-web-directory -type d -exec sudo chmod g+s {} \;
+
+# Assuming deploy.sh is in /home/user/root-web-directory
+# sudo chown user:www-data /home/user/root-web-directory/deploy.sh
+# sudo chmod 664 /home/user/root-web-directory/deploy.sh
+
+# Make it executable
+# sudo chmod +x /home/user/root-web-directory/deploy.sh
+
+# Test you can write to a file
+# echo "test" >> /home/user/root-web-directory/deploy.sh
+
+# If this works without sudo, you're all set!
+
+# Do NOT uncomment the above commands 
+########################################################################################################
 
 
 # remove comment if need
