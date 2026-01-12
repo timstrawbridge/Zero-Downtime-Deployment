@@ -126,9 +126,6 @@ ln -nfs "$SHARED_DIR/storage" "$GIT_REPO_HOME/$TIMESTAMP/storage"
 
 cd "$GIT_REPO_HOME/$TIMESTAMP"
 
-#check if composer is installed
-log "Checking if composer is installed..."
-
 # run the composer setup : composer.lock file should be available
 composer install --optimize-autoloader --no-dev --no-interaction --prefer-dist
 
@@ -153,7 +150,18 @@ ln -nfs "$GIT_REPO_HOME/$TIMESTAMP" "$CURRENT_LINK"
 
 # Reload PHP-FPM to clear opcache
 log "Reloading PHP-FPM..."
-sudo systemctl reload php-fpm
+# sudo systemctl reload php-fpm
+if systemctl is-active --quiet php8.3-fpm; then
+    sudo systemctl reload php8.3-fpm
+elif systemctl is-active --quiet php-fpm; then
+    sudo systemctl reload php-fpm
+elif systemctl is-active --quiet php8.2-fpm; then
+    sudo systemctl reload php8.2-fpm
+elif systemctl is-active --quiet php8.1-fpm; then
+    sudo systemctl reload php8.1-fpm
+else
+    log "WARNING: Could not find PHP-FPM service to reload"
+fi
 
 # Clean up old releases
 log "Cleaning up old releases (keeping last $KEEP_RELEASES)..."
